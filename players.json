@@ -1,0 +1,30 @@
+{
+    'person': {
+        'personFifaId': '2835831', 
+        'internationalFirstName': 'FERNANDO', 
+        'internationalLastName': 'CARDOZO', 
+        'gender': 'MALE', 
+        'nationality': 'PY', 
+        'nationalityFIFA': 'PAR', 
+        'dateOfBirth': '2001-02-08', 
+        'countryOfBirth': 'PY', 
+        'countryOfBirthFIFA': 'PAR', 
+        'regionOfBirth': None, 
+        'placeOfBirth': 'ASUNCION', 
+        'place': None, 
+        'localPersonNames': [{
+            'personFifaId': '2835831', 
+            'firstName': 'FERNANDO DAVID', 
+            'lastName': 'CARDOZO PANIAGUA', 
+            'popularName': None, 
+            'language': None, 
+            'birthName': None, 
+            'title': None
+        }], 
+        'national_team': None, 
+        'playerPosition': 'Forward', 
+        'rowNumber': 1, 
+        'homegrown': 0
+    }, 
+    'playersPersonFifaId': 2835831, 
+    'shirtNumber': 14}

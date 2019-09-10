@@ -12,10 +12,12 @@ from os import getenv
 api_user    = 'diegogonzalez'
 api_pass    = 'diegogonzalezCON'
 api_fifa    = '39393'
+api_comp    = '30205939'
 api_anho    = '2019'
 
 #DEFAULT
-base_con    = 'Driver={SQL Server};Server=CEROUNO-PC-01\MSSQLEXPRESS2016;Database=SMBIANCAV20;Trusted_Connection=yes;'
+#base_con    = 'Driver={SQL Server};Server=CEROUNO-PC-01\MSSQLEXPRESS2016;Database=SMBIANCAV20;Trusted_Connection=yes;'
+base_con    = 'Driver={SQL Server};Server=PC-CZELAYA\SQLEXPRESS2014;Database=SMBIANCAV20;Trusted_Connection=yes;'
 base_url    = 'https://api.analyticom.de/api/export/comet/'
 headers     = {
         'Accept': '*/*',
@@ -26,6 +28,27 @@ headers     = {
         'Content-Type': 'application/json; charset=UTF-8',
         'User-Agent': 'Mozilla/5.0'
     }
+
+def getOrganisations(var01, var02, var03, var04):
+    try:
+        str_connection  = pyodbc.connect(base_con)
+        str_cursor      = str_connection.cursor()
+
+        str_query00     = "SELECT * FROM [SMBIANCAV20].[comet].[organisations] WHERE organisationFifaId = ?"
+        str_cursor.execute(str_query00, (var01))
+        str_row00       = str_cursor.fetchone()
+
+        if str_row00 == False:
+            str_query   = "INSERT INTO [SMBIANCAV20].[comet].[organisations] (organisationFifaId, organisationName, organisationNature, organisationShortName, lastUpdate) VALUES (?, ?, ?, ?, GETDATE())"
+            str_cursor.execute(str_query, (var01, var02, var03, var04))
+
+        str_connection.commit()
+    except pyodbc.Error as err:
+        print('getOrganisations(): Error MSSQL => ', err)
+
+    finally:
+        str_cursor.close()
+        str_connection.close()
 
 def getCompetitions():
     try:
@@ -77,18 +100,176 @@ def getCompetitions():
                 str_connection.commit()
 
         except requests.ConnectionError as err:
-            print('Error getCompetitions => ', err)
-
-        finally:
-            print('Finally getCompetitions')
+            print('getCompetitions(): Error => ', err)
 
     except pyodbc.Error as err:
-        print('Error MSSQL => ', err)
+        print('getCompetitions: Error MSSQL => ', err)
 
     finally:
-        print('Finally MSSQL Connection')
         str_cursor.close()
         str_connection.close()
 
+def getTeams():
+    try:
+        str_connection  = pyodbc.connect(base_con)
+        str_cursor      = str_connection.cursor()
+
+        str_query00     = "SELECT competitionFifaId FROM [SMBIANCAV20].[comet].[competitions] WHERE season = ?"
+        str_cursor.execute(str_query00, (api_anho))
+        str_row00       = str_cursor.fetchall()
+
+        for row00 in str_row00:
+            try:
+                JSONurl     = base_url + 'competition/' + str(row00[0]) + '/teams'
+                JSONResponse= requests.get(JSONurl, auth=(api_user, api_pass), headers=headers).json()
+                
+                for JSONData in JSONResponse:
+                    _teamFifaId                 = JSONData['teamFifaId']
+                    _competitionFifaId          = JSONData['competitionFifaId']
+                    
+                    if JSONData['organisationFifaId']:
+                        _organisationFifaId         = JSONData['organisationFifaId']
+                        getOrganisations(JSONData['organisationFifaId'], JSONData['organisationName'], JSONData['organisationShortName'], JSONData['organisationShortName'])
+                    else:
+                        _organisationFifaId         = 1
+
+                    _facilityFifaId             = JSONData['facilityFifaId']
+
+                    if JSONData['status']:
+                        _status                 = JSONData['status'].upper().strip()
+                    else:
+                        _status                 = JSONData['status']
+
+                    if JSONData['internationalName']:
+                        _internationalName      = JSONData['internationalName'].upper().strip()
+                    else:
+                        _internationalName      = JSONData['internationalName']
+
+                    if JSONData['internationalShortName']:
+                        _internationalShortName = JSONData['internationalShortName'].upper().strip()
+                    else:
+                        _internationalShortName = JSONData['internationalShortName']
+
+                    if JSONData['organisationNature']:
+                        _organisationNature     = JSONData['organisationNature'].upper().strip()
+                    else:
+                        _organisationNature     = JSONData['organisationNature']
+
+                    if JSONData['country']:
+                        _country                = JSONData['country'].upper().strip()
+                    else:
+                        _country                = JSONData['country']
+
+                    if JSONData['region']:                        
+                        _region                 = JSONData['region'].upper().strip()
+                    else:
+                        _region                 = JSONData['region']
+
+                    if JSONData['town']:
+                        _town                   = JSONData['town'].upper().strip()
+                    else:
+                        _town                   = JSONData['town']
+                    
+                    if JSONData['postalCode']:
+                        _postalCode             = JSONData['postalCode'].upper().strip()
+                    else:
+                        _postalCode             = JSONData['postalCode']
+
+                    str_query01     = "SELECT * FROM [SMBIANCAV20].[comet].[teams] WHERE teamFifaId = ?"
+                    str_cursor.execute(str_query01, (_teamFifaId))
+                    str_row01       = str_cursor.fetchone()
+
+                    if str_row01:
+                        str_query11 = "UPDATE [SMBIANCAV20].[comet].[teams] SET organisationFifaId = ?, facilityFifaId = ?, status = ?, internationalName = ?, internationalShortName = ?, organisationNature = ?, country = ?, region = ?, town = ?, postalCode = ?, lastUpdate = GETDATE() WHERE teamFifaId = ?"
+                        str_cursor.execute(str_query11, (_organisationFifaId, _facilityFifaId, _status, _internationalName, _internationalShortName, _organisationNature, _country, _region, _town, _postalCode, _teamFifaId))
+                    else:
+                        str_query11 = "INSERT INTO [SMBIANCAV20].[comet].[teams] (teamFifaId, organisationFifaId, facilityFifaId, status, internationalName, internationalShortName, organisationNature, country, region, town, postalCode, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
+                        str_cursor.execute(str_query11, (_teamFifaId, _organisationFifaId, _facilityFifaId, _status, _internationalName, _internationalShortName, _organisationNature, _country, _region, _town, _postalCode))
+                    
+                    str_query02     = "SELECT * FROM [SMBIANCAV20].[comet].[competitions_teams] WHERE competitionFifaId = ? AND teamFifaId = ?"
+                    str_cursor.execute(str_query02, (_competitionFifaId, _teamFifaId))
+                    str_row02       = str_cursor.fetchone()
+
+                    if str_row02:
+                        str_query21 = "UPDATE [SMBIANCAV20].[comet].[competitions_teams] SET lastUpdate = GETDATE() WHERE competitionFifaId = ? AND teamFifaId = ?"
+                        str_cursor.execute(str_query21, (_competitionFifaId, _teamFifaId))
+                    else:
+                        str_query21 = "INSERT INTO [SMBIANCAV20].[comet].[competitions_teams] (competitionFifaId, teamFifaId, lastUpdate) VALUES (?, ?, GETDATE())"
+                        str_cursor.execute(str_query21, (_competitionFifaId, _teamFifaId))
+
+                    str_connection.commit()
+
+            except requests.ConnectionError as err:
+                print('getTeams(): Error => ', err)
+
+    except pyodbc.Error as err:
+        print('getTeams(): Error MSSQL =>', err)
+
+    finally:
+        str_cursor.close()
+        str_connection.close()
+
+def getPlayers():
+    try:
+        str_connection  = pyodbc.connect(base_con)
+        str_cursor      = str_connection.cursor()
+
+        str_query00     = "SELECT competitionFifaId, teamFifaId FROM [SMBIANCAV20].[comet].[competitions_teams]"
+        str_cursor.execute(str_query00)
+        str_row00       = str_cursor.fetchone()
+
+        if str_row00:
+#        str_row00       = str_cursor.fetchall()
+#        for row00 in str_row00:
+            try:
+#                JSONurl     = base_url + 'competition/' + str(row00[0]) + '/' + str(row00[1]) + '/players' 
+                JSONurl     = base_url + 'competition/28641757/54741/players' 
+                JSONResponse= requests.get(JSONurl, auth=(api_user, api_pass), headers=headers).json()
+                
+                for JSONData in JSONResponse['players']:
+                    _personFifaId               = JSONData['person']['personFifaId']
+
+                    if JSONData['person']['internationalFirstName']:
+                        _internationalFirstName     = JSONData['person']['internationalFirstName'].upper().strip()
+                    else:
+                        _internationalFirstName     = JSONData['person']['internationalFirstName']
+
+                    _internationalLastName      = JSONData['person']['internationalLastName']
+                    _firstName                  = JSONData['person']['localPersonNames']['firstName']
+                    _lastName                   = JSONData['person']['localPersonNames']['lastName']
+                    _popularName                = JSONData['person']['localPersonNames']['popularName']
+                    _birthName                  = JSONData['person']['localPersonNames']['birthName']
+                    _language                   = JSONData['person']['localPersonNames']['language']
+                    _title                      = JSONData['person']['localPersonNames']['title']
+                    _countryOfBirth             = JSONData['person']['countryOfBirth']
+                    _countryOfBirthFIFA         = JSONData['person']['countryOfBirthFIFA']
+                    _regionOfBirth              = JSONData['person']['regionOfBirth']
+                    _placeOfBirth               = JSONData['person']['placeOfBirth']
+                    _dateOfBirth                = JSONData['person']['dateOfBirth']
+                    _gender                     = JSONData['person']['gender']
+                    _homegrown                  = JSONData['person']['homegrown']
+                    _national_team              = JSONData['person']['national_team']
+                    _nationality                = JSONData['person']['nationality']
+                    _nationalityFIFA            = JSONData['person']['nationalityFIFA']
+                    _place                      = JSONData['person']['place']
+                    _playerPosition             = JSONData['person']['playerPosition']
+                    _rowNumber                  = JSONData['person']['rowNumber']
+                    _shirtNumber                = JSONData['shirtNumber']
+
+            except requests.ConnectionError as err:
+                print('getPlayers(): Error => ', err)
+
+    except pyodbc.Error as err:
+        print('getPlayers(): Error MSSQL =>', err)
+
+    finally:
+        str_cursor.close()
+        str_connection.close()
+
+def getPersons():
+    print('')
+
 if __name__ == "__main__":
-    getCompetitions()
+#    getCompetitions()
+#    getTeams()
+    getPlayers()

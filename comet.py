@@ -222,8 +222,8 @@ def getCompetitions():
                         str_cursor.execute(str_query01, (_competitionFifaId, _organisationFifaId, _superiorCompetitionFifaId, _status, _internationalName, _internationalShortName, _season, _ageCategory, _ageCategoryName, _dateFrom, _dateTo, _discipline, _gender, _imageId, _multiplier, _nature, _numberOfParticipants, _orderNumber, _teamCharacter, _flyingSubstitutions, _penaltyShootout, _matchType, _pictureContentType, _pictureLink, _pictureValue))
                         str_connection.commit()
                         print(getDateTime(), 'getCompetitions(): INSERT competitions competitionFifaId:', _competitionFifaId)
-                    
-                    #getTeams(api_user, api_pass, _competitionFifaId)
+                        getTeams(api_user, api_pass, _competitionFifaId)
+                        
                     getMatches(api_user, api_pass, _competitionFifaId)
                     
             except requests.ConnectionError as err:
@@ -953,4 +953,3 @@ def getFacilities(p_user, p_pass, p_facilityFifaId):
 
 if __name__ == "__main__":
     getCompetitions()
-#    getPersons('diegogonzalez', 'diegogonzalezCON', 2151445)

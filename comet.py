@@ -11,7 +11,8 @@ from os import getenv
 
 #DEFAULT
 #base_con    = 'Driver={SQL Server};Server=CEROUNO-PC-01\MSSQLEXPRESS2016;Database=COMET;Trusted_Connection=yes;'
-base_con    = 'Driver={SQL Server};Server=PC-CZELAYA\SQLEXPRESS2014;Database=COMET;Trusted_Connection=yes;'
+#base_con    = 'Driver={SQL Server};Server=PC-CZELAYA\SQLEXPRESS2014;Database=COMET;Trusted_Connection=yes;'
+base_con    = 'Driver={SQL Server};Server=10.10.10.17;Database=CSF_LESIONES;Trusted_Connection=no;UID=user_lesiones;PWD=C0nm3b0l..!LESIONES'
 base_url    = 'https://api.analyticom.de/api/export/comet/'
 headers     = {
         'Accept': '*/*',
@@ -38,18 +39,18 @@ def getOrganisations(p_organisationFifaId, p_status, p_organisationName, p_organ
         str_connection  = pyodbc.connect(base_con)
         str_cursor      = str_connection.cursor()
 
-        str_query00     = "SELECT status FROM [COMET].[comet].[organisations] WHERE organisationFifaId = ?"
+        str_query00     = "SELECT status FROM [comet].[organisations] WHERE organisationFifaId = ?"
         str_cursor.execute(str_query00, (p_organisationFifaId))
         str_row00       = str_cursor.fetchone()
 
         if str_row00:
             if str_row00[0] == 'UPDATE':
-                str_query   = "UPDATE [COMET].[comet].[organisations] SET status = 'ACTIVE', organisationName = ?, organisationNature = ?, organisationShortName = ?, lastUpdate = GETDATE() WHERE organisationFifaId = ?"
+                str_query   = "UPDATE [comet].[organisations] SET status = 'ACTIVE', organisationName = ?, organisationNature = ?, organisationShortName = ?, lastUpdate = GETDATE() WHERE organisationFifaId = ?"
                 str_cursor.execute(str_query, (p_organisationName, p_organisationNature, p_organisationShortName, p_organisationFifaId))
                 str_connection.commit()
                 print(getDateTime(), 'getOrganisations(): UPDATE organisations organisationFifaId:', p_organisationFifaId)
         else:
-            str_query   = "INSERT INTO [COMET].[comet].[organisations] (organisationFifaId, status, organisationName, organisationNature, organisationShortName, lastUpdate) VALUES (?, ?, ?, ?, ?, GETDATE())"
+            str_query   = "INSERT INTO [comet].[organisations] (organisationFifaId, status, organisationName, organisationNature, organisationShortName, lastUpdate) VALUES (?, ?, ?, ?, ?, GETDATE())"
             str_cursor.execute(str_query, (p_organisationFifaId, p_status, p_organisationName, p_organisationNature, p_organisationShortName))
             str_connection.commit()
             print(getDateTime(), 'getOrganisations(): INSERT organisations organisationFifaId:', p_organisationFifaId)
@@ -68,7 +69,7 @@ def getCompetitions():
         str_connection  = pyodbc.connect(base_con)
         str_cursor      = str_connection.cursor()
 
-        str_query00     = "SELECT organisationFifaId, season, username, password FROM [COMET].[comet].[logins] WHERE status = 'ACTIVE'"
+        str_query00     = "SELECT organisationFifaId, season, username, password FROM [comet].[logins] WHERE status = 'ACTIVE'"
         str_cursor.execute(str_query00)
         str_row00       = str_cursor.fetchone()
         
@@ -207,18 +208,18 @@ def getCompetitions():
                     else:
                         _matchType                  = JSONData['matchType']
                     
-                    str_select      = "SELECT * FROM [COMET].[comet].[competitions] WHERE competitionFifaId = ?"
+                    str_select      = "SELECT * FROM [comet].[competitions] WHERE competitionFifaId = ?"
                     str_cursor.execute(str_select, (_competitionFifaId))
                     str_row         = str_cursor.fetchone()
 
                     if str_row:
-                        str_query01     = "UPDATE [COMET].[comet].[competitions] SET organisationFifaId = ?, superiorCompetitionFifaId = ?, status = ?, internationalName = ?, internationalShortName = ?, season = ?, ageCategory = ?, ageCategoryName = ?, dateFrom = ?, dateTo = ?, discipline = ?, gender = ?, imageId = ?, multiplier = ?, nature = ?, numberOfParticipants = ?, orderNumber = ?, teamCharacter = ?, flyingSubstitutions = ?, penaltyShootout = ?, matchType = ?, pictureContentType = ?, pictureLink = ?, pictureValue = ?, lastUpdate = GETDATE() WHERE competitionFifaId = ?"
+                        str_query01     = "UPDATE [comet].[competitions] SET organisationFifaId = ?, superiorCompetitionFifaId = ?, status = ?, internationalName = ?, internationalShortName = ?, season = ?, ageCategory = ?, ageCategoryName = ?, dateFrom = ?, dateTo = ?, discipline = ?, gender = ?, imageId = ?, multiplier = ?, nature = ?, numberOfParticipants = ?, orderNumber = ?, teamCharacter = ?, flyingSubstitutions = ?, penaltyShootout = ?, matchType = ?, pictureContentType = ?, pictureLink = ?, pictureValue = ?, lastUpdate = GETDATE() WHERE competitionFifaId = ?"
                         str_cursor.execute(str_query01, (_organisationFifaId, _superiorCompetitionFifaId, _status, _internationalName, _internationalShortName, _season, _ageCategory, _ageCategoryName, _dateFrom, _dateTo, _discipline, _gender, _imageId, _multiplier, _nature, _numberOfParticipants, _orderNumber, _teamCharacter, _flyingSubstitutions, _penaltyShootout, _matchType, _pictureContentType, _pictureLink, _pictureValue, _competitionFifaId))
                         str_connection.commit()
                         print(getDateTime(), 'getCompetitions(): UPDATE competitions competitionFifaId:', _competitionFifaId)
 
                     else:
-                        str_query01     = "INSERT INTO [COMET].[comet].[competitions] (competitionFifaId, organisationFifaId, superiorCompetitionFifaId, status, internationalName, internationalShortName, season, ageCategory, ageCategoryName, dateFrom, dateTo, discipline, gender, imageId, multiplier, nature, numberOfParticipants, orderNumber, teamCharacter, flyingSubstitutions, penaltyShootout, matchType, pictureContentType, pictureLink, pictureValue, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
+                        str_query01     = "INSERT INTO [comet].[competitions] (competitionFifaId, organisationFifaId, superiorCompetitionFifaId, status, internationalName, internationalShortName, season, ageCategory, ageCategoryName, dateFrom, dateTo, discipline, gender, imageId, multiplier, nature, numberOfParticipants, orderNumber, teamCharacter, flyingSubstitutions, penaltyShootout, matchType, pictureContentType, pictureLink, pictureValue, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
                         str_cursor.execute(str_query01, (_competitionFifaId, _organisationFifaId, _superiorCompetitionFifaId, _status, _internationalName, _internationalShortName, _season, _ageCategory, _ageCategoryName, _dateFrom, _dateTo, _discipline, _gender, _imageId, _multiplier, _nature, _numberOfParticipants, _orderNumber, _teamCharacter, _flyingSubstitutions, _penaltyShootout, _matchType, _pictureContentType, _pictureLink, _pictureValue))
                         str_connection.commit()
                         print(getDateTime(), 'getCompetitions(): INSERT competitions competitionFifaId:', _competitionFifaId)
@@ -243,7 +244,7 @@ def getTeams(p_user, p_pass, p_competitionFifaId):
         str_connection  = pyodbc.connect(base_con)
         str_cursor      = str_connection.cursor()
 
-        str_query00     = "SELECT * FROM [COMET].[comet].[competitions] WHERE competitionFifaId = ?"
+        str_query00     = "SELECT * FROM [comet].[competitions] WHERE competitionFifaId = ?"
         str_cursor.execute(str_query00, (p_competitionFifaId))
         str_row00       = str_cursor.fetchone()
 
@@ -310,22 +311,22 @@ def getTeams(p_user, p_pass, p_competitionFifaId):
                     else:
                         _postalCode                 = JSONData['postalCode']
 
-                    str_query01     = "SELECT * FROM [COMET].[comet].[teams] WHERE teamFifaId = ?"
+                    str_query01     = "SELECT * FROM [comet].[teams] WHERE teamFifaId = ?"
                     str_cursor.execute(str_query01, (_teamFifaId))
                     str_row01       = str_cursor.fetchone()
 
                     if str_row01 == None:
-                        str_query02 = "INSERT INTO [COMET].[comet].[teams] (teamFifaId, organisationFifaId, facilityFifaId, status, internationalName, internationalShortName, organisationNature, country, region, town, postalCode, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
+                        str_query02 = "INSERT INTO [comet].[teams] (teamFifaId, organisationFifaId, facilityFifaId, status, internationalName, internationalShortName, organisationNature, country, region, town, postalCode, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
                         str_cursor.execute(str_query02, (_teamFifaId, _organisationFifaId, _facilityFifaId, _status, _internationalName, _internationalShortName, _organisationNature, _country, _region, _town, _postalCode))
                         str_connection.commit()
                         print(getDateTime(), 'getTeams(): INSERT teams teamFifaId:', _teamFifaId)
                     
-                    str_query03     = "SELECT * FROM [COMET].[comet].[competitions_teams] WHERE competitionFifaId = ? AND teamFifaId = ?"
+                    str_query03     = "SELECT * FROM [comet].[competitions_teams] WHERE competitionFifaId = ? AND teamFifaId = ?"
                     str_cursor.execute(str_query03, (_competitionFifaId, _teamFifaId))
                     str_row03       = str_cursor.fetchone()
 
                     if str_row03 == None:
-                        str_query04 = "INSERT INTO [COMET].[comet].[competitions_teams] (competitionFifaId, teamFifaId, lastUpdate) VALUES (?, ?, GETDATE())"
+                        str_query04 = "INSERT INTO [comet].[competitions_teams] (competitionFifaId, teamFifaId, lastUpdate) VALUES (?, ?, GETDATE())"
                         str_cursor.execute(str_query04, (_competitionFifaId, _teamFifaId))
                         str_connection.commit()
                         print(getDateTime(), 'getTeams(): INSERT competitions_teams competitions:',  _competitionFifaId, ', teams:', _teamFifaId)
@@ -349,7 +350,7 @@ def getPlayers(p_user, p_pass, p_competitionFifaId, p_teamFifaId):
         str_connection  = pyodbc.connect(base_con)
         str_cursor      = str_connection.cursor()
 
-        str_query00     = "SELECT competitionFifaId, teamFifaId FROM [COMET].[comet].[competitions_teams] WHERE competitionFifaId = ? AND teamFifaId = ?"
+        str_query00     = "SELECT competitionFifaId, teamFifaId FROM [comet].[competitions_teams] WHERE competitionFifaId = ? AND teamFifaId = ?"
         str_cursor.execute(str_query00, (p_competitionFifaId, p_teamFifaId))
         str_row00       = str_cursor.fetchone()
 
@@ -372,12 +373,12 @@ def getPlayers(p_user, p_pass, p_competitionFifaId, p_teamFifaId):
                     else:
                         _shirtNumber                = JSONData['shirtNumber']
 
-                    str_query01     = "SELECT * FROM [COMET].[comet].[competitions_teams_players] WHERE competitionFifaId = ? AND teamFifaId = ? AND playerFifaId = ?"
+                    str_query01     = "SELECT * FROM [comet].[competitions_teams_players] WHERE competitionFifaId = ? AND teamFifaId = ? AND playerFifaId = ?"
                     str_cursor.execute(str_query01, (p_competitionFifaId, p_teamFifaId, _personFifaId))
                     str_row01       = str_cursor.fetchone()
 
                     if str_row01 == None:
-                        str_query_02    = "INSERT INTO [COMET].[comet].[competitions_teams_players] (competitionFifaId, teamFifaId, playerFifaId, shirtNumber, lastUpdate) VALUES (?, ?, ?, ?, GETDATE())"
+                        str_query_02    = "INSERT INTO [comet].[competitions_teams_players] (competitionFifaId, teamFifaId, playerFifaId, shirtNumber, lastUpdate) VALUES (?, ?, ?, ?, GETDATE())"
                         str_cursor.execute(str_query_02, (p_competitionFifaId, p_teamFifaId, _personFifaId, _shirtNumber))
                         str_connection.commit()
                         print(getDateTime(), 'getPlayers(): INSERT competitions_teams_players competitionFifaId:', p_competitionFifaId, ', teamFifaId:', p_teamFifaId, ', playerFifaId:', _personFifaId)
@@ -399,7 +400,7 @@ def getMatches(p_user, p_pass, p_competitionFifaId):
         str_connection  = pyodbc.connect(base_con)
         str_cursor      = str_connection.cursor()
 
-        str_query00     = "SELECT * FROM [COMET].[comet].[competitions] WHERE competitionFifaId = ?"
+        str_query00     = "SELECT * FROM [comet].[competitions] WHERE competitionFifaId = ?"
         str_cursor.execute(str_query00, (p_competitionFifaId))
         str_row00       = str_cursor.fetchone()
 
@@ -466,18 +467,18 @@ def getMatches(p_user, p_pass, p_competitionFifaId):
                     else:
                         _resultSupplementAway       = JSONData['resultSupplementAway']
 
-                    str_query01     = "SELECT * FROM [COMET].[comet].[matches] WHERE matchFifaId = ?"
+                    str_query01     = "SELECT * FROM [comet].[matches] WHERE matchFifaId = ?"
                     str_cursor.execute(str_query01, (_matchFifaId))
                     str_row01       = str_cursor.fetchone()
 
                     if str_row01:
-                        str_query02 = "UPDATE [COMET].[comet].[matches] SET competitionFifaId = ?, facilityFifaId = ?, status = ?, attendance = ?, dateTimeLocal = ?, matchDay = ?, matchDayDesc = ?, matchOrderNumber = ?, resultSupplement = ?, resultSupplementHome = ?, resultSupplementAway = ?, lastUpdate = GETDATE() WHERE matchFifaId = ?"
+                        str_query02 = "UPDATE [comet].[matches] SET competitionFifaId = ?, facilityFifaId = ?, status = ?, attendance = ?, dateTimeLocal = ?, matchDay = ?, matchDayDesc = ?, matchOrderNumber = ?, resultSupplement = ?, resultSupplementHome = ?, resultSupplementAway = ?, lastUpdate = GETDATE() WHERE matchFifaId = ?"
                         str_cursor.execute(str_query02, (_competitionFifaId, _facilityFifaId, _status, _attendance, _dateTimeLocal, _matchDay, _matchDayDesc, _matchOrderNumber, _resultSupplement, _resultSupplementHome, _resultSupplementAway, _matchFifaId))
                         str_connection.commit()
                         print(getDateTime(), 'getMatches(): UPDATE matches matchFifaId:', _matchFifaId)
 
                     else:
-                        str_query02 = "INSERT INTO [COMET].[comet].[matches] (matchFifaId, competitionFifaId, facilityFifaId, status, attendance, dateTimeLocal, matchDay, matchDayDesc, matchOrderNumber, resultSupplement, resultSupplementHome, resultSupplementAway, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
+                        str_query02 = "INSERT INTO [comet].[matches] (matchFifaId, competitionFifaId, facilityFifaId, status, attendance, dateTimeLocal, matchDay, matchDayDesc, matchOrderNumber, resultSupplement, resultSupplementHome, resultSupplementAway, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
                         str_cursor.execute(str_query02, (_matchFifaId, _competitionFifaId, _facilityFifaId, _status, _attendance, _dateTimeLocal, _matchDay, _matchDayDesc, _matchOrderNumber, _resultSupplement, _resultSupplementHome, _resultSupplementAway))
                         str_connection.commit()
                         print(getDateTime(), 'getMatches(): INSERT matches matchFifaId:', _matchFifaId)
@@ -491,12 +492,12 @@ def getMatches(p_user, p_pass, p_competitionFifaId):
                         else:
                             _teamNature     = JSONDataTeam['teamNature']
 
-                        str_query03     = "SELECT * FROM [COMET].[comet].[matches_teams] WHERE matchFifaId = ? AND teamFifaId = ?"
+                        str_query03     = "SELECT * FROM [comet].[matches_teams] WHERE matchFifaId = ? AND teamFifaId = ?"
                         str_cursor.execute(str_query03, (_matchFifaId, _teamFifaId))
                         str_row03       = str_cursor.fetchone()
 
                         if str_row03 == None:
-                            str_query_04    = "INSERT INTO [COMET].[comet].[matches_teams] (matchFifaId, teamFifaId, teamNature, lastUpdate) VALUES (?, ?, ?, GETDATE())"
+                            str_query_04    = "INSERT INTO [comet].[matches_teams] (matchFifaId, teamFifaId, teamNature, lastUpdate) VALUES (?, ?, ?, GETDATE())"
                             str_cursor.execute(str_query_04, (_matchFifaId, _teamFifaId, _teamNature))
                             str_connection.commit()
                             print(getDateTime(), 'getMatches(): INSERT matches_teams matchFifaId:', _matchFifaId, 'teamFifaId:', _teamFifaId, 'teamNature:', _teamNature)
@@ -546,18 +547,18 @@ def getMatches(p_user, p_pass, p_competitionFifaId):
                         else:
                             _phaseLength    = JSONDataPhases['phaseLength']
 
-                        str_query05     = "SELECT * FROM [COMET].[comet].[matches_phases] WHERE matchFifaId = ? AND phase = ?"
+                        str_query05     = "SELECT * FROM [comet].[matches_phases] WHERE matchFifaId = ? AND phase = ?"
                         str_cursor.execute(str_query05, (_matchFifaId, _phase))
                         str_row05       = str_cursor.fetchone()
 
                         if str_row05:
-                            str_query_06    = "UPDATE [COMET].[comet].[matches_phases] SET homeScore = ?, awayScore = ?, startDateTime = ?, endDateTime = ?, regularTime = ?, stoppageTime = ?, phaseLength = ?, lastUpdate = GETDATE() WHERE matchFifaId = ? AND phase = ?"
+                            str_query_06    = "UPDATE [comet].[matches_phases] SET homeScore = ?, awayScore = ?, startDateTime = ?, endDateTime = ?, regularTime = ?, stoppageTime = ?, phaseLength = ?, lastUpdate = GETDATE() WHERE matchFifaId = ? AND phase = ?"
                             str_cursor.execute(str_query_06, (_homeScore, _awayScore, _startDateTime, _endDateTime, _regularTime, _stoppageTime, _phaseLength, _matchFifaId, _phase))
                             str_connection.commit()
                             print(getDateTime(), 'getMatches(): UPDATE matches_phases matchFifaId:', _matchFifaId, 'phase:', _phase)
 
                         else:
-                            str_query_06    = "INSERT INTO [COMET].[comet].[matches_phases] (matchFifaId, phase, homeScore, awayScore, startDateTime, endDateTime, regularTime, stoppageTime, phaseLength, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
+                            str_query_06    = "INSERT INTO [comet].[matches_phases] (matchFifaId, phase, homeScore, awayScore, startDateTime, endDateTime, regularTime, stoppageTime, phaseLength, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
                             str_cursor.execute(str_query_06, (_matchFifaId, _phase, _homeScore, _awayScore, _startDateTime, _endDateTime, _regularTime, _stoppageTime, _phaseLength))
                             str_connection.commit()
                             print(getDateTime(), 'getMatches(): INSERT matches_phases matchFifaId:', _matchFifaId, 'phase:', _phase)
@@ -596,12 +597,12 @@ def getMatches(p_user, p_pass, p_competitionFifaId):
                         else:
                             _cometRoleNameKey   = JSONDataOfficials['cometRoleNameKey']
 
-                        str_query07     = "SELECT * FROM [COMET].[comet].[matches_officials] WHERE matchFifaId = ? AND personFifaId = ?"
+                        str_query07     = "SELECT * FROM [comet].[matches_officials] WHERE matchFifaId = ? AND personFifaId = ?"
                         str_cursor.execute(str_query07, (_matchFifaId, _personFifaId))
                         str_row07       = str_cursor.fetchone()
 
                         if str_row07 == None:
-                            str_query_08    = "INSERT INTO [COMET].[comet].[matches_officials] (matchFifaId, personFifaId, personName, role, roleDescription, cometRoleName, cometRoleNameKey, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE())"
+                            str_query_08    = "INSERT INTO [comet].[matches_officials] (matchFifaId, personFifaId, personName, role, roleDescription, cometRoleName, cometRoleNameKey, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE())"
                             str_cursor.execute(str_query_08, (_matchFifaId, _personFifaId, _personName, _role, _roleDescription, _cometRoleName, _cometRoleNameKey))
                             str_connection.commit()
                             print(getDateTime(), 'getMatches(): INSERT matches_officials matchFifaId:', _matchFifaId, 'personFifaId:', _personFifaId)
@@ -623,7 +624,7 @@ def getPersons(p_user, p_pass, p_personFifaId):
         str_connection  = pyodbc.connect(base_con)
         str_cursor      = str_connection.cursor()
 
-        str_query00     = "SELECT * FROM [COMET].[comet].[persons] WHERE personFifaId = ?"
+        str_query00     = "SELECT * FROM [comet].[persons] WHERE personFifaId = ?"
         str_cursor.execute(str_query00, (p_personFifaId))
         str_row00       = str_cursor.fetchone()
 
@@ -751,12 +752,12 @@ def getPersons(p_user, p_pass, p_personFifaId):
                     else:
                         _rowNumber                  = JSONData['rowNumber']
 
-                    str_query01     = "SELECT * FROM [COMET].[comet].[persons] WHERE personFifaId = ?"
+                    str_query01     = "SELECT * FROM [comet].[persons] WHERE personFifaId = ?"
                     str_cursor.execute(str_query01, (_personFifaId))
                     str_row01       = str_cursor.fetchone()
 
                     if str_row01 == None:
-                        str_query_02    = "INSERT INTO [COMET].[comet].[persons] (personFifaId, internationalFirstName, internationalLastName, firstName, lastName, popularName, birthName, language, title, countryOfBirth, countryOfBirthFIFA, regionOfBirth, placeOfBirth, dateOfBirth, gender, homegrown, national_team, nationality, nationalityFIFA, place, playerPosition, rowNumber, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
+                        str_query_02    = "INSERT INTO [comet].[persons] (personFifaId, internationalFirstName, internationalLastName, firstName, lastName, popularName, birthName, language, title, countryOfBirth, countryOfBirthFIFA, regionOfBirth, placeOfBirth, dateOfBirth, gender, homegrown, national_team, nationality, nationalityFIFA, place, playerPosition, rowNumber, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
                         str_cursor.execute(str_query_02, (_personFifaId, _internationalFirstName, _internationalLastName, _firstName, _lastName, _popularName, _birthName, _language, _title, _countryOfBirth, _countryOfBirthFIFA, _regionOfBirth, _placeOfBirth, _dateOfBirth, _gender, _homegrown, _national_team, _nationality, _nationalityFIFA, _place, _playerPosition, _rowNumber))
                         str_connection.commit()
                         print(getDateTime(), 'getPersons(): INSERT persons personFifaId:', _personFifaId)
@@ -778,7 +779,7 @@ def getFacilities(p_user, p_pass, p_facilityFifaId):
         str_connection  = pyodbc.connect(base_con)
         str_cursor      = str_connection.cursor()
 
-        str_query00     = "SELECT * FROM [COMET].[comet].[facilities] WHERE facilityFifaId = ?"
+        str_query00     = "SELECT * FROM [comet].[facilities] WHERE facilityFifaId = ?"
         str_cursor.execute(str_query00, (p_facilityFifaId))
         str_row00       = str_cursor.fetchone()
 
@@ -931,12 +932,12 @@ def getFacilities(p_user, p_pass, p_facilityFifaId):
                         _regionName     = None
                         _language       = None
                     
-                    str_query01     = "SELECT * FROM [COMET].[comet].[facilities] WHERE facilityFifaId = ?"
+                    str_query01     = "SELECT * FROM [comet].[facilities] WHERE facilityFifaId = ?"
                     str_cursor.execute(str_query01, (_facilityFifaId))
                     str_row01       = str_cursor.fetchone()
 
                     if str_row01 == None:
-                        str_query_02    = "INSERT INTO [COMET].[comet].[facilities] (facilityFifaId, organisationFifaId, parentFacilityFifaId, status, internationalName, internationalShortName, name, shortName, town, placeName, regionName, language, address, webAddress, email, phone, fax, capacity, discipline, groundNature, latitude, longitude, length, orderNumber, width, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
+                        str_query_02    = "INSERT INTO [comet].[facilities] (facilityFifaId, organisationFifaId, parentFacilityFifaId, status, internationalName, internationalShortName, name, shortName, town, placeName, regionName, language, address, webAddress, email, phone, fax, capacity, discipline, groundNature, latitude, longitude, length, orderNumber, width, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
                         str_cursor.execute(str_query_02, (_facilityFifaId, _organisationFifaId, _parentFacilityFifaId, _status, _internationalName, _internationalShortName, _name, _shortName, _town, _placeName, _regionName, _language, _address, _webAddress, _email, _phone, _fax, _capacity, _discipline, _groundNature, _latitude, _longitude, _length, _orderNumber, _width))
                         str_connection.commit()
                         print(getDateTime(), 'getFacilities(): INSERT facilities facilityFifaId:', _facilityFifaId)

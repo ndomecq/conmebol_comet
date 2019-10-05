@@ -12,7 +12,7 @@ from os import getenv
 #DEFAULT
 #base_con    = 'Driver={SQL Server};Server=CEROUNO-PC-01\MSSQLEXPRESS2016;Database=COMET;Trusted_Connection=yes;'
 #base_con    = 'Driver={SQL Server};Server=PC-CZELAYA\SQLEXPRESS2014;Database=COMET;Trusted_Connection=yes;'
-base_con    = 'Driver={SQL Server};Server=10.10.10.17;Database=CSF_LESIONES;Trusted_Connection=no;UID=user_lesiones;PWD=C0nm3b0l..!LESIONES'
+base_con    = 'Driver={SQL Server};Server=10.10.10.17;Database=CSF_LESIONES;UID=user_lesiones;PWD=C0nm3b0l..!LESIONES'
 base_url    = 'https://api.analyticom.de/api/export/comet/'
 headers     = {
         'Accept': '*/*',

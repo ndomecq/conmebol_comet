@@ -1,4 +1,4 @@
-USE [SLBIANCA]
+USE [CSF_LESIONES]
 GO
 
 SET ANSI_NULLS ON
@@ -311,25 +311,3 @@ GO
 
 INSERT INTO [comet].[persons] (personFifaId, internationalFirstName, internationalLastName, firstName, lastName, popularName, lastUpdate) VALUES (1, 'DEFAULT', 'DEFAULT', 'DEFAULT', 'DEFAULT', 'DEFAULT', GETDATE())
 GO
-
-/*
-DELETE FROM [SMBIANCAV20].[comet].[competitions_teams_players]
-DELETE FROM [SMBIANCAV20].[comet].[competitions_teams]
-DELETE FROM [SMBIANCAV20].[comet].[competitions]
-DELETE FROM [SMBIANCAV20].[comet].[teams]
-DELETE FROM [SMBIANCAV20].[comet].[persons]
-DELETE FROM [SMBIANCAV20].[comet].[organisations]
-*/
-
-SELECT * FROM [COMET].[comet].[logins]
-SELECT * FROM [COMET].[comet].[organisations]
-SELECT * FROM [COMET].[comet].[competitions]
-SELECT * FROM [COMET].[comet].[teams]
-SELECT * FROM [COMET].[comet].[persons]
-SELECT * FROM [COMET].[comet].[competitions_teams]
-SELECT * FROM [COMET].[comet].[competitions_teams_players]
-SELECT * FROM [COMET].[comet].[facilities]
-SELECT * FROM [COMET].[comet].[matches]
-SELECT * FROM [COMET].[comet].[matches_teams]
-SELECT * FROM [COMET].[comet].[matches_officials]
-SELECT * FROM [COMET].[comet].[matches_phases]

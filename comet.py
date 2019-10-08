@@ -952,5 +952,26 @@ def getFacilities(p_user, p_pass, p_facilityFifaId):
         str_cursor.close()
         str_connection.close()
 
+def setProceso(p_status):
+    try:
+        print(getDateTime(), 'setProceso(): INGRESO')
+
+        str_connection  = pyodbc.connect(base_con)
+        str_cursor      = str_connection.cursor()
+
+        str_query   = "INSERT INTO [comet].[processes] (status, lastUpdate) VALUES (?, GETDATE())"
+        str_cursor.execute(str_query, (p_status))
+        str_connection.commit()
+        print(getDateTime(), 'setProceso(): INSERT processes status:', p_status)
+
+    except pyodbc.Error as err:
+        print(getDateTime(), 'setProceso(): Error MSSQL => ', err)
+
+    finally:
+        str_cursor.close()
+        str_connection.close()
+
 if __name__ == "__main__":
+    setProceso('INICIO')
     getCompetitions()
+    setProceso('FIN')

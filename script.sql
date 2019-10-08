@@ -10,6 +10,13 @@ GO
 CREATE SCHEMA [comet]
 GO
 
+CREATE TABLE [comet].[processes](
+	[processId] [int] IDENTITY(1,1) NOT NULL,
+	[status] [varchar](100) NOT NULL,
+	[lastUpdate] [datetime] NULL,
+ CONSTRAINT [pk_processes] PRIMARY KEY CLUSTERED ([processId] ASC) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
+GO
+
 CREATE TABLE [comet].[logins](
 	[loginFifaId] [int] IDENTITY(1,1) NOT NULL,
 	[organisationFifaId] [int] NOT NULL,

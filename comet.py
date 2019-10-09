@@ -57,6 +57,7 @@ def getOrganisations(p_organisationFifaId, p_status, p_organisationName, p_organ
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getOrganisations(): Error MSSQL => ', err)
+        setProceso('getOrganisations() pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -75,7 +76,7 @@ def getCompetitions():
         
         if str_row00:
             try:
-                print(getDateTime(), 'getCompetitions()2: EXISTE logins')
+                print(getDateTime(), 'getCompetitions(): EXISTE logins')
 
                 api_fifa    = str_row00[0]
                 api_anho    = str_row00[1]
@@ -217,6 +218,7 @@ def getCompetitions():
                         str_cursor.execute(str_query01, (_organisationFifaId, _superiorCompetitionFifaId, _status, _internationalName, _internationalShortName, _season, _ageCategory, _ageCategoryName, _dateFrom, _dateTo, _discipline, _gender, _imageId, _multiplier, _nature, _numberOfParticipants, _orderNumber, _teamCharacter, _flyingSubstitutions, _penaltyShootout, _matchType, _pictureContentType, _pictureLink, _pictureValue, _competitionFifaId))
                         str_connection.commit()
                         print(getDateTime(), 'getCompetitions(): UPDATE competitions competitionFifaId:', _competitionFifaId)
+                        getTeams(api_user, api_pass, _competitionFifaId)
 
                     else:
                         str_query01     = "INSERT INTO [comet].[competitions] (competitionFifaId, organisationFifaId, superiorCompetitionFifaId, status, internationalName, internationalShortName, season, ageCategory, ageCategoryName, dateFrom, dateTo, discipline, gender, imageId, multiplier, nature, numberOfParticipants, orderNumber, teamCharacter, flyingSubstitutions, penaltyShootout, matchType, pictureContentType, pictureLink, pictureValue, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
@@ -225,13 +227,72 @@ def getCompetitions():
                         print(getDateTime(), 'getCompetitions(): INSERT competitions competitionFifaId:', _competitionFifaId)
                         getTeams(api_user, api_pass, _competitionFifaId)
                         
+                    getImagenCompetitions(api_user, api_pass, _competitionFifaId)
                     getMatches(api_user, api_pass, _competitionFifaId)
                     
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getCompetitions(): Error => ', err)
+                setProceso('getCompetitions() requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getCompetitions: Error MSSQL => ', err)
+        setProceso('getCompetitions() pyodbc => ', err)
+
+    finally:
+        str_cursor.close()
+        str_connection.close()
+
+def getImagenCompetitions(p_user, p_pass, p_competitionFifaId):
+    try:
+        print(getDateTime(), 'getImagenCompetitions(): INGRESO')
+
+        str_connection  = pyodbc.connect(base_con)
+        str_cursor      = str_connection.cursor()
+
+        str_query00     = "SELECT * FROM [comet].[competitions] WHERE competitionFifaId = ?"
+        str_cursor.execute(str_query00, (p_competitionFifaId))
+        str_row00       = str_cursor.fetchone()
+        
+        if str_row00:
+            try:
+                print(getDateTime(), 'getImagenCompetitions(): EXISTE competitionFifaId')
+
+                JSONurl     = base_url + 'images/competition/'+str(p_competitionFifaId)
+                JSONResponse= requests.get(JSONurl, auth=(p_user, p_pass), headers=headers).json()
+                
+                for JSONData in JSONResponse:
+                    if JSONData['contentType']:
+                        _pictureContentType         = JSONData['contentType']
+                    else:
+                        _pictureContentType         = JSONData['contentType']
+
+                    if JSONData['pictureLink']:
+                        _pictureLink                = JSONData['pictureLink']
+                    else:
+                        _pictureLink                = JSONData['pictureLink']
+
+                    if JSONData['value']:
+                        _pictureValue               = JSONData['value']
+                    else:
+                        _pictureValue               = JSONData['value']
+                    
+                    str_select      = "SELECT * FROM [comet].[competitions] WHERE competitionFifaId = ? AND pictureValue IS NULL"
+                    str_cursor.execute(str_select, (_competitionFifaId))
+                    str_row         = str_cursor.fetchone()
+
+                    if str_row:
+                        str_query01     = "UPDATE [comet].[competitions] SET pictureContentType = ?, pictureLink = ?, pictureValue = ?, lastUpdate = GETDATE() WHERE competitionFifaId = ?"
+                        str_cursor.execute(str_query01, (_pictureContentType, _pictureLink, _pictureValue, p_competitionFifaId))
+                        str_connection.commit()
+                        print(getDateTime(), 'getImagenCompetitions(): UPDATE competitions competitionFifaId:', p_competitionFifaId)
+                    
+            except requests.ConnectionError as err:
+                print(getDateTime(), 'getImagenCompetitions(): Error => ', err)
+                setProceso('getImagenCompetitions() requests => ', err)
+
+    except pyodbc.Error as err:
+        print(getDateTime(), 'getImagenCompetitions: Error MSSQL => ', err)
+        setProceso('getImagenCompetitions() pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -335,9 +396,11 @@ def getTeams(p_user, p_pass, p_competitionFifaId):
 
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getTeams(): Error => ', err)
+                setProceso('getTeams() requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getTeams(): Error MSSQL =>', err)
+        setProceso('getTeams() pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -385,9 +448,11 @@ def getPlayers(p_user, p_pass, p_competitionFifaId, p_teamFifaId):
 
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getPlayers(): Error => ', err)
+                setProceso('getPlayers() requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getPlayers(): Error MSSQL =>', err)
+        setProceso('getPlayers() pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -609,9 +674,11 @@ def getMatches(p_user, p_pass, p_competitionFifaId):
 
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getMatches(): Error => ', err)
+                setProceso('getMatches() requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getMatches(): Error MSSQL =>', err)
+        setProceso('getMatches() pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -764,9 +831,11 @@ def getPersons(p_user, p_pass, p_personFifaId):
 
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getPersons(): Error => ', err)
+                setProceso('getPersons() requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getPersons(): Error MSSQL =>', err)
+        setProceso('getPersons() pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -944,34 +1013,37 @@ def getFacilities(p_user, p_pass, p_facilityFifaId):
 
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getFacilities(): Error => ', err)
+                setProceso('getFacilities() requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getFacilities(): Error MSSQL =>', err)
+        setProceso('getFacilities() pyodbc => ', err)
 
     finally:
         str_cursor.close()
         str_connection.close()
 
-def setProceso(p_status):
+def setProceso(p_status, p_errors):
     try:
         print(getDateTime(), 'setProceso(): INGRESO')
 
         str_connection  = pyodbc.connect(base_con)
         str_cursor      = str_connection.cursor()
 
-        str_query   = "INSERT INTO [comet].[processes] (status, lastUpdate) VALUES (?, GETDATE())"
+        str_query   = "INSERT INTO [comet].[processes] (status, errors, lastUpdate) VALUES (?, ?, GETDATE())"
         str_cursor.execute(str_query, (p_status))
         str_connection.commit()
-        print(getDateTime(), 'setProceso(): INSERT processes status:', p_status)
+        print(getDateTime(), 'setProceso(): INSERT processes status:', p_status, p_errors)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'setProceso(): Error MSSQL => ', err)
+        setProceso('setProceso() pyodbc => ', err)
 
     finally:
         str_cursor.close()
         str_connection.close()
 
 if __name__ == "__main__":
-    setProceso('INICIO')
+    setProceso('INICIO', '-')
     getCompetitions()
-    setProceso('FIN')
+    setProceso('FIN', '-')

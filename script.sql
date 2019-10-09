@@ -13,6 +13,7 @@ GO
 CREATE TABLE [comet].[processes](
 	[processId] [int] IDENTITY(1,1) NOT NULL,
 	[status] [varchar](100) NOT NULL,
+	[erros] [varchar](MAX) NULL,
 	[lastUpdate] [datetime] NULL,
  CONSTRAINT [pk_processes] PRIMARY KEY CLUSTERED ([processId] ASC) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
 GO
@@ -63,7 +64,7 @@ CREATE TABLE [comet].[competitions](
 	[matchType] [varchar](100) NULL,
 	[pictureContentType] [varchar](100) NULL,
 	[pictureLink] [varchar](100) NULL,
-	[pictureValue] [varchar](100) NULL,
+	[pictureValue] [varchar](MAX) NULL,
 	[lastUpdate] [datetime] NULL,
  CONSTRAINT [pk_competitions] PRIMARY KEY CLUSTERED([competitionFifaId] ASC) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
 GO

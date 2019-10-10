@@ -58,7 +58,7 @@ def getOrganisations(p_organisationFifaId, p_status, p_organisationName, p_organ
     except pyodbc.Error as err:
         print(getDateTime(), 'getOrganisations(p_organisationFifaId: ', p_organisationFifaId, '): Error MSSQL => ', err)
         str_pro = getDateTime() + ' getOrganisations()'
-        str_err = 'getOrganisations(p_organisationFifaId: ' + str(p_organisationFifaId) + ') pyodbc => ' + err
+        str_err = 'getOrganisations(p_organisationFifaId: ' + str(p_organisationFifaId) + ') pyodbc => ' + str(err)
         setProceso(str_pro, str_err)
 
     finally:
@@ -235,13 +235,13 @@ def getCompetitions():
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getCompetitions(): Error => requests', err)
                 str_pro = getDateTime() + ' getCompetitions()'
-                str_err = 'getCompetitions(_competitionFifaId: ' + str(_competitionFifaId) + ') requests => ' + err
+                str_err = 'getCompetitions(_competitionFifaId: ' + str(_competitionFifaId) + ') requests => ' + str(err)
                 setProceso(str_pro, str_err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getCompetitions: Error MSSQL => ', err)
         str_pro = getDateTime() + ' getCompetitions()'
-        str_err = 'getCompetitions(_competitionFifaId: ' + str(_competitionFifaId) + ') pyodbc => ' + err
+        str_err = 'getCompetitions(_competitionFifaId: ' + str(_competitionFifaId) + ') pyodbc => ' + str(err)
         setProceso(str_pro, str_err)
 
     finally:
@@ -295,13 +295,13 @@ def getImagenCompetitions(p_user, p_pass, p_competitionFifaId):
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getImagenCompetitions(): Error => ', err)
                 str_pro = getDateTime() + ' getImagenCompetitions()'
-                str_err = 'getImagenCompetitions(p_competitionFifaId: ' + str(p_competitionFifaId) + ') requests => ' + err
+                str_err = 'getImagenCompetitions(p_competitionFifaId: ' + str(p_competitionFifaId) + ') requests => ' + str(err)
                 setProceso(str_pro, str_err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getImagenCompetitions: Error MSSQL => ', err)
         str_pro = getDateTime() + ' getImagenCompetitions()'
-        str_err = 'getImagenCompetitions(p_competitionFifaId: ' + str(p_competitionFifaId) + ') pyodbc => ' + err
+        str_err = 'getImagenCompetitions(p_competitionFifaId: ' + str(p_competitionFifaId) + ') pyodbc => ' + str(err)
         setProceso(str_pro, str_err)
 
     finally:
@@ -407,13 +407,13 @@ def getTeams(p_user, p_pass, p_competitionFifaId):
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getTeams(): Error => ', err)
                 str_pro = getDateTime() + ' getTeams()'
-                str_err = 'getTeams(p_competitionFifaId: ' + str(p_competitionFifaId) + ') requests => ' + err
+                str_err = 'getTeams(p_competitionFifaId: ' + str(p_competitionFifaId) + ') requests => ' + str(err)
                 setProceso(str_pro, str_err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getTeams(): Error MSSQL =>', err)
         str_pro = getDateTime() + ' getTeams()'
-        str_err = 'getTeams(p_competitionFifaId: ' + str(p_competitionFifaId) + ') pyodbc => ' + err
+        str_err = 'getTeams(p_competitionFifaId: ' + str(p_competitionFifaId) + ') pyodbc => ' + str(err)
         setProceso(str_pro, str_err)
 
     finally:
@@ -463,13 +463,13 @@ def getPlayers(p_user, p_pass, p_competitionFifaId, p_teamFifaId):
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getPlayers(p_competitionFifaId: ', p_competitionFifaId, ', p_teamFifaId: ', p_teamFifaId, '): Error => ', err)
                 str_pro = getDateTime() + ' getPlayers()'
-                str_err = 'getPlayers(p_competitionFifaId: ' + str(p_competitionFifaId) + ', p_teamFifaId: ' + str(p_teamFifaId) + ') requests => ' + err
+                str_err = 'getPlayers(p_competitionFifaId: ' + str(p_competitionFifaId) + ', p_teamFifaId: ' + str(p_teamFifaId) + ') requests => ' + str(err)
                 setProceso(str_pro, str_err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getPlayers(p_competitionFifaId: ', p_competitionFifaId, ', p_teamFifaId: ', p_teamFifaId, '): Error MSSQL =>', err)
         str_pro = getDateTime() + ' getPlayers()'
-        str_err = 'getPlayers(p_competitionFifaId: ' + str(p_competitionFifaId) + ', p_teamFifaId: ' + str(p_teamFifaId) + ') pyodbc => ' + err
+        str_err = 'getPlayers(p_competitionFifaId: ' + str(p_competitionFifaId) + ', p_teamFifaId: ' + str(p_teamFifaId) + ') pyodbc => ' + str(err)
         setProceso(str_pro, str_err)
 
     finally:
@@ -693,14 +693,13 @@ def getMatches(p_user, p_pass, p_competitionFifaId):
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getMatches(): Error => ', err)
                 str_pro = getDateTime() + ' getMatches()'
-                str_err = 'getMatches(p_competitionFifaId: ' + str(p_competitionFifaId) + ', _matchFifaId: ' + str(_matchFifaId) + ') requests => ' + err
+                str_err = 'getMatches(p_competitionFifaId: ' + str(p_competitionFifaId) + ', _matchFifaId: ' + str(_matchFifaId) + ') requests => ' + str(err)
                 setProceso(str_pro, str_err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getMatches(): Error MSSQL =>', err)
         str_pro = getDateTime() + ' getMatches()'
-        print('getMatches(): Error ', p_competitionFifaId, ' otro error ', _matchFifaId)
-        str_err = 'getMatches(p_competitionFifaId: ' + str(p_competitionFifaId) + ', _matchFifaId: ' + str(_matchFifaId) + ') pyodbc => ' + err
+        str_err = 'getMatches(p_competitionFifaId: ' + str(p_competitionFifaId) + ', _matchFifaId: ' + str(_matchFifaId) + ') pyodbc => ' + str(err)
         setProceso(str_pro, str_err)
 
     finally:
@@ -855,13 +854,13 @@ def getPersons(p_user, p_pass, p_personFifaId):
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getPersons(): Error => ', err)
                 str_pro = getDateTime() + ' getPersons()'
-                str_err = 'getPersons(p_personFifaId: ' + str(p_personFifaId) + ') requests => ' + err
+                str_err = 'getPersons(p_personFifaId: ' + str(p_personFifaId) + ') requests => ' + str(err)
                 setProceso(str_pro, str_err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getPersons(): Error MSSQL =>', err)
         str_pro = getDateTime() + ' getPersons()'
-        str_err = 'getPersons(p_personFifaId: ' + str(p_personFifaId) + ') pyodbc => ' + err
+        str_err = 'getPersons(p_personFifaId: ' + str(p_personFifaId) + ') pyodbc => ' + str(err)
         setProceso(str_pro, str_err)
 
     finally:
@@ -1041,13 +1040,13 @@ def getFacilities(p_user, p_pass, p_facilityFifaId):
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getFacilities(): Error => ', err)
                 str_pro = getDateTime() + ' getFacilities()'
-                str_err = 'getFacilities(p_facilityFifaId: ' + str(p_facilityFifaId) + ') requests => ' + err
+                str_err = 'getFacilities(p_facilityFifaId: ' + str(p_facilityFifaId) + ') requests => ' + str(err)
                 setProceso(str_pro, str_err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getFacilities(): Error MSSQL =>', err)
         str_pro = getDateTime() + ' getFacilities()'
-        str_err = 'getFacilities(p_facilityFifaId: ' + str(p_facilityFifaId) + ') pyodbc => ' + err
+        str_err = 'getFacilities(p_facilityFifaId: ' + str(p_facilityFifaId) + ') pyodbc => ' + str(err)
         setProceso(str_pro, str_err)
 
     finally:
@@ -1068,7 +1067,7 @@ def setProceso(p_status, p_errors):
 
     except pyodbc.Error as err:
         print(getDateTime(), 'setProceso(): Error MSSQL => ', err)
-        setProceso('setProceso() pyodbc => ', err)
+        setProceso('setProceso() pyodbc => ', str(err))
 
     finally:
         str_cursor.close()

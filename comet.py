@@ -1044,6 +1044,6 @@ def setProceso(p_status, p_errors):
         str_connection.close()
 
 if __name__ == "__main__":
-    setProceso('__name__', '-')
+    setProceso('INICIO', '-')
     getCompetitions()
-    setProceso('__name__', '-')
+    setProceso('FIN', '-')

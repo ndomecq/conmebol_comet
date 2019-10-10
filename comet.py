@@ -699,6 +699,7 @@ def getMatches(p_user, p_pass, p_competitionFifaId):
     except pyodbc.Error as err:
         print(getDateTime(), 'getMatches(): Error MSSQL =>', err)
         str_pro = getDateTime() + ' getMatches()'
+        print('getMatches(): Error ', p_competitionFifaId, ' otro error ', _matchFifaId)
         str_err = 'getMatches(p_competitionFifaId: ' + str(p_competitionFifaId) + ', _matchFifaId: ' + str(_matchFifaId) + ') pyodbc => ' + err
         setProceso(str_pro, str_err)
 

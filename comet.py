@@ -56,8 +56,8 @@ def getOrganisations(p_organisationFifaId, p_status, p_organisationName, p_organ
             print(getDateTime(), 'getOrganisations(): INSERT organisations organisationFifaId:', p_organisationFifaId)
 
     except pyodbc.Error as err:
-        print(getDateTime(), 'getOrganisations(): Error MSSQL => ', err)
-        setProceso('getOrganisations() pyodbc => ', err)
+        print(getDateTime(), 'getOrganisations(p_organisationFifaId: '.p_organisationFifaId.'): Error MSSQL => ', err)
+        setProceso('getOrganisations(p_organisationFifaId: '.p_organisationFifaId.') pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -232,11 +232,11 @@ def getCompetitions():
                     
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getCompetitions(): Error => ', err)
-                setProceso('getCompetitions() requests => ', err)
+                setProceso('getCompetitions(_competitionFifaId: '._competitionFifaId.') requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getCompetitions: Error MSSQL => ', err)
-        setProceso('getCompetitions() pyodbc => ', err)
+        setProceso('getCompetitions(_competitionFifaId: '._competitionFifaId.') pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -288,11 +288,11 @@ def getImagenCompetitions(p_user, p_pass, p_competitionFifaId):
                     
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getImagenCompetitions(): Error => ', err)
-                setProceso('getImagenCompetitions() requests => ', err)
+                setProceso('getImagenCompetitions(p_competitionFifaId: '.p_competitionFifaId.') requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getImagenCompetitions: Error MSSQL => ', err)
-        setProceso('getImagenCompetitions() pyodbc => ', err)
+        setProceso('getImagenCompetitions(p_competitionFifaId: '.p_competitionFifaId.') pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -396,11 +396,11 @@ def getTeams(p_user, p_pass, p_competitionFifaId):
 
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getTeams(): Error => ', err)
-                setProceso('getTeams() requests => ', err)
+                setProceso('getTeams(p_competitionFifaId: '.p_competitionFifaId.') requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getTeams(): Error MSSQL =>', err)
-        setProceso('getTeams() pyodbc => ', err)
+        setProceso('getTeams(p_competitionFifaId: '.p_competitionFifaId.') pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -447,12 +447,12 @@ def getPlayers(p_user, p_pass, p_competitionFifaId, p_teamFifaId):
                         print(getDateTime(), 'getPlayers(): INSERT competitions_teams_players competitionFifaId:', p_competitionFifaId, ', teamFifaId:', p_teamFifaId, ', playerFifaId:', _personFifaId)
 
             except requests.ConnectionError as err:
-                print(getDateTime(), 'getPlayers(): Error => ', err)
-                setProceso('getPlayers() requests => ', err)
+                print(getDateTime(), 'getPlayers(p_competitionFifaId: '.p_competitionFifaId.', p_teamFifaId: '.p_teamFifaId.'): Error => ', err)
+                setProceso('getPlayers(p_competitionFifaId: '.p_competitionFifaId.', p_teamFifaId: '.p_teamFifaId.') requests => ', err)
 
     except pyodbc.Error as err:
-        print(getDateTime(), 'getPlayers(): Error MSSQL =>', err)
-        setProceso('getPlayers() pyodbc => ', err)
+        print(getDateTime(), 'getPlayers(p_competitionFifaId: '.p_competitionFifaId.', p_teamFifaId: '.p_teamFifaId.'): Error MSSQL =>', err)
+        setProceso('getPlayers(p_competitionFifaId: '.p_competitionFifaId.', p_teamFifaId: '.p_teamFifaId.') pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -674,11 +674,11 @@ def getMatches(p_user, p_pass, p_competitionFifaId):
 
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getMatches(): Error => ', err)
-                setProceso('getMatches() requests => ', err)
+                setProceso('getMatches(p_competitionFifaId: '.p_competitionFifaId.', _matchFifaId: '._matchFifaId.') requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getMatches(): Error MSSQL =>', err)
-        setProceso('getMatches() pyodbc => ', err)
+        setProceso('getMatches(p_competitionFifaId: '.p_competitionFifaId.', _matchFifaId: '._matchFifaId.') pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -831,11 +831,11 @@ def getPersons(p_user, p_pass, p_personFifaId):
 
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getPersons(): Error => ', err)
-                setProceso('getPersons() requests => ', err)
+                setProceso('getPersons(p_personFifaId: '.p_personFifaId.') requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getPersons(): Error MSSQL =>', err)
-        setProceso('getPersons() pyodbc => ', err)
+        setProceso('getPersons(p_personFifaId: '.p_personFifaId.') pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -1013,11 +1013,11 @@ def getFacilities(p_user, p_pass, p_facilityFifaId):
 
             except requests.ConnectionError as err:
                 print(getDateTime(), 'getFacilities(): Error => ', err)
-                setProceso('getFacilities() requests => ', err)
+                setProceso('getFacilities(p_facilityFifaId: '.p_facilityFifaId.') requests => ', err)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'getFacilities(): Error MSSQL =>', err)
-        setProceso('getFacilities() pyodbc => ', err)
+        setProceso('getFacilities(p_facilityFifaId: '.p_facilityFifaId.') pyodbc => ', err)
 
     finally:
         str_cursor.close()
@@ -1031,9 +1031,9 @@ def setProceso(p_status, p_errors):
         str_cursor      = str_connection.cursor()
 
         str_query   = "INSERT INTO [comet].[processes] (status, errors, lastUpdate) VALUES (?, ?, GETDATE())"
-        str_cursor.execute(str_query, (p_status))
+        str_cursor.execute(str_query, (p_status, , p_errors))
         str_connection.commit()
-        print(getDateTime(), 'setProceso(): INSERT processes status:', p_status, p_errors)
+        print(getDateTime(), 'setProceso(): INSERT processes status:' p_status)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'setProceso(): Error MSSQL => ', err)
@@ -1044,6 +1044,6 @@ def setProceso(p_status, p_errors):
         str_connection.close()
 
 if __name__ == "__main__":
-    setProceso('INICIO', '-')
+    setProceso('__name__', '-')
     getCompetitions()
-    setProceso('FIN', '-')
+    setProceso('__name__', '-')

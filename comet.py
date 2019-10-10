@@ -277,7 +277,7 @@ def getImagenCompetitions(p_user, p_pass, p_competitionFifaId):
                         _pictureValue               = JSONData['value']
                     
                     str_select      = "SELECT * FROM [comet].[competitions] WHERE competitionFifaId = ? AND pictureValue IS NULL"
-                    str_cursor.execute(str_select, (_competitionFifaId))
+                    str_cursor.execute(str_select, (p_competitionFifaId))
                     str_row         = str_cursor.fetchone()
 
                     if str_row:

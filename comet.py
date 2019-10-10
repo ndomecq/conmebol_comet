@@ -1033,7 +1033,7 @@ def setProceso(p_status, p_errors):
         str_query   = "INSERT INTO [comet].[processes] (status, errors, lastUpdate) VALUES (?, ?, GETDATE())"
         str_cursor.execute(str_query, (p_status, p_errors))
         str_connection.commit()
-        print(getDateTime(), 'setProceso(): INSERT processes status:' p_status)
+        print(getDateTime(), 'setProceso(): INSERT processes status:', p_status)
 
     except pyodbc.Error as err:
         print(getDateTime(), 'setProceso(): Error MSSQL => ', err)

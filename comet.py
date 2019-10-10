@@ -708,7 +708,7 @@ def getMatches(p_user, p_pass, p_competitionFifaId):
 
 def getPersons(p_user, p_pass, p_personFifaId):
     try:
-        print(getDateTime(), 'getPersons(): INGRESO', p_personFifaId)
+        print(getDateTime(), 'getPersons(): INGRESO')
 
         str_connection  = pyodbc.connect(base_con)
         str_cursor      = str_connection.cursor()

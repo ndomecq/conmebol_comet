@@ -964,7 +964,7 @@ def getPersonsImagen(p_user, p_pass, p_personFifaId):
                         _pictureValue               = JSONData['value']
                     
                     str_select      = "SELECT * FROM [comet].[persons] WHERE personFifaId = ? AND pictureValue IS NULL"
-                    str_cursor.execute(str_select, (v))
+                    str_cursor.execute(str_select, (p_personFifaId))
                     str_row         = str_cursor.fetchone()
 
                     if str_row:

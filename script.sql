@@ -35,6 +35,9 @@ CREATE TABLE [comet].[organisations](
 	[organisationName] [varchar](100) NULL,
 	[organisationNature] [varchar](100) NULL,
 	[organisationShortName] [varchar](100) NULL,
+	[pictureContentType] [varchar](100) NULL,
+	[pictureLink] [varchar](100) NULL,
+	[pictureValue] [varchar](MAX) NULL,
 	[lastUpdate] [datetime] NULL,
  CONSTRAINT [pk_organisations] PRIMARY KEY CLUSTERED ([organisationFifaId] ASC) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
 GO
@@ -168,6 +171,9 @@ CREATE TABLE [comet].[persons](
 	[place] [varchar](100) NULL,
 	[playerPosition] [varchar](100) NULL,
 	[rowNumber] [int] NULL,
+	[pictureContentType] [varchar](100) NULL,
+	[pictureLink] [varchar](100) NULL,
+	[pictureValue] [varchar](MAX) NULL,
 	[lastUpdate] [datetime] NULL,
  CONSTRAINT [pk_persons] PRIMARY KEY CLUSTERED([personFifaId] ASC) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
 GO

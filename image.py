@@ -123,10 +123,11 @@ def setImagen(var01, var02, var03, var04):
         str_exth = '.png'
 
     str_img     = str_path + str_exth
+    fil_img     = base64.b64decode(var04)
 
     if os.path.isfile(str_img) == False:
         with open(str_img, 'wb') as fh:
-            fh.write(base64.decodestring(var04))
+            fh.write(fil_img)
         
 def setProceso(p_status, p_errors):
     try:

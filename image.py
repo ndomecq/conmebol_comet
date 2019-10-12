@@ -108,7 +108,7 @@ def setPlayersImagen():
 
 def setImagen(var01, var02, var03, var04):
     str_exth    = '.png' 
-    str_path    = '/var/www/portalmedico.conmebol.com/public_html/imagen/' + var01 + '/img_' + var02
+    str_path    = '/var/www/portalmedico.conmebol.com/public_html/imagen/' + var01 + '/img_' + str(var02)
 
     if var03 == 'image/png':
         str_exth = '.png'

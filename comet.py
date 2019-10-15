@@ -242,7 +242,7 @@ def getCompetitions():
                         _superiorCompetitionFifaId  = JSONData['superiorCompetitionFifaId']
                     else:
                         _superiorCompetitionFifaId  = JSONData['superiorCompetitionFifaId']
-
+                    """
                     if JSONData['picture']['contentType']:
                         _pictureContentType         = JSONData['picture']['contentType']
                     else:
@@ -257,7 +257,7 @@ def getCompetitions():
                         _pictureValue               = JSONData['picture']['value']
                     else:
                         _pictureValue               = JSONData['picture']['value']
-
+                    """
                     if JSONData['flyingSubstitutions']:
                         _flyingSubstitutions        = JSONData['flyingSubstitutions']
                     else:
@@ -278,15 +278,15 @@ def getCompetitions():
                     str_row         = str_cursor.fetchone()
 
                     if str_row:
-                        str_query01     = "UPDATE [comet].[competitions] SET organisationFifaId = ?, superiorCompetitionFifaId = ?, status = ?, internationalName = ?, internationalShortName = ?, season = ?, ageCategory = ?, ageCategoryName = ?, dateFrom = ?, dateTo = ?, discipline = ?, gender = ?, imageId = ?, multiplier = ?, nature = ?, numberOfParticipants = ?, orderNumber = ?, teamCharacter = ?, flyingSubstitutions = ?, penaltyShootout = ?, matchType = ?, pictureContentType = ?, pictureLink = ?, pictureValue = ?, lastUpdate = GETDATE() WHERE competitionFifaId = ?"
-                        str_cursor.execute(str_query01, (_organisationFifaId, _superiorCompetitionFifaId, _status, _internationalName, _internationalShortName, _season, _ageCategory, _ageCategoryName, _dateFrom, _dateTo, _discipline, _gender, _imageId, _multiplier, _nature, _numberOfParticipants, _orderNumber, _teamCharacter, _flyingSubstitutions, _penaltyShootout, _matchType, _pictureContentType, _pictureLink, _pictureValue, _competitionFifaId))
+                        str_query01     = "UPDATE [comet].[competitions] SET organisationFifaId = ?, superiorCompetitionFifaId = ?, status = ?, internationalName = ?, internationalShortName = ?, season = ?, ageCategory = ?, ageCategoryName = ?, dateFrom = ?, dateTo = ?, discipline = ?, gender = ?, imageId = ?, multiplier = ?, nature = ?, numberOfParticipants = ?, orderNumber = ?, teamCharacter = ?, flyingSubstitutions = ?, penaltyShootout = ?, matchType = ?, lastUpdate = GETDATE() WHERE competitionFifaId = ?"
+                        str_cursor.execute(str_query01, (_organisationFifaId, _superiorCompetitionFifaId, _status, _internationalName, _internationalShortName, _season, _ageCategory, _ageCategoryName, _dateFrom, _dateTo, _discipline, _gender, _imageId, _multiplier, _nature, _numberOfParticipants, _orderNumber, _teamCharacter, _flyingSubstitutions, _penaltyShootout, _matchType, _competitionFifaId))
                         str_connection.commit()
                         print(getDateTime(), 'getCompetitions(): UPDATE competitions competitionFifaId:', _competitionFifaId)
                         getTeams(api_user, api_pass, _competitionFifaId)
 
                     else:
-                        str_query01     = "INSERT INTO [comet].[competitions] (competitionFifaId, organisationFifaId, superiorCompetitionFifaId, status, internationalName, internationalShortName, season, ageCategory, ageCategoryName, dateFrom, dateTo, discipline, gender, imageId, multiplier, nature, numberOfParticipants, orderNumber, teamCharacter, flyingSubstitutions, penaltyShootout, matchType, pictureContentType, pictureLink, pictureValue, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
-                        str_cursor.execute(str_query01, (_competitionFifaId, _organisationFifaId, _superiorCompetitionFifaId, _status, _internationalName, _internationalShortName, _season, _ageCategory, _ageCategoryName, _dateFrom, _dateTo, _discipline, _gender, _imageId, _multiplier, _nature, _numberOfParticipants, _orderNumber, _teamCharacter, _flyingSubstitutions, _penaltyShootout, _matchType, _pictureContentType, _pictureLink, _pictureValue))
+                        str_query01     = "INSERT INTO [comet].[competitions] (competitionFifaId, organisationFifaId, superiorCompetitionFifaId, status, internationalName, internationalShortName, season, ageCategory, ageCategoryName, dateFrom, dateTo, discipline, gender, imageId, multiplier, nature, numberOfParticipants, orderNumber, teamCharacter, flyingSubstitutions, penaltyShootout, matchType, lastUpdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())"
+                        str_cursor.execute(str_query01, (_competitionFifaId, _organisationFifaId, _superiorCompetitionFifaId, _status, _internationalName, _internationalShortName, _season, _ageCategory, _ageCategoryName, _dateFrom, _dateTo, _discipline, _gender, _imageId, _multiplier, _nature, _numberOfParticipants, _orderNumber, _teamCharacter, _flyingSubstitutions, _penaltyShootout, _matchType))
                         str_connection.commit()
                         print(getDateTime(), 'getCompetitions(): INSERT competitions competitionFifaId:', _competitionFifaId)
                         getTeams(api_user, api_pass, _competitionFifaId)
